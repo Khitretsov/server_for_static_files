@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//RU">
+<html>
+<head>
+  <title>Портал NexTouch Санитайзер</title>
+  <link rel="icon" href="/Image/favicon.png" type="image/png">
+  <meta charset="utf-8">
+  <script src="Script/jquery.js"></script>
+  <script src="Script/jquery-ui.js"></script>
+  <script src="Script/jquery.timepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="Script/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="Script/jquery-ui.theme.css">
+  <link rel="stylesheet" type="text/css" href="Script/jquery.timepicker.css">
+  
+  <script src="Script/common.js" defer></script>
+  <link href="Script/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <!-- %BODY% -->
+
+  <div>
+    <div class="dark_background" hidden></div>
+     <!-- --------------------- -->
+  
+    <div class="creation_modal_window" id="edit_modal" hidden>
+      <form name="edit_modal">
+        <div class="inputs_block">
+          <div class="main_inputs">
+            <div class="photo_block">
+              <img alt="Нет фото" width="400" height="300" id="photo">
+            </div>
+            <div>
+              <input placeholder="Фамилия"  type="text" name="name1" value="%NAME1%">
+              <input placeholder="Имя"      type="text" name="name2" value="%NAME2%">
+              <input placeholder="Отчество" type="text" name="name3" value="%NAME3%">
+              <input placeholder="Класс"    type="text" name="grade" value="%GRADE%">
+            </div>
+          </div>
+
+          <div id="error_message_edit_modal" style="color: red"></div>
+    
+          <div class="submit_btn">
+            <input type="submit" value="Перейти к аналитике" class="analyst_btn_2" onclick="
+
+              this.setAttribute('disabled', true)
+              this.setAttribute('style', 'background-color: gray; cursor: auto;')
+
+              event.preventDefault() 
+              const form = document.forms['edit_modal']
+              const data = {
+                name1: form['name1'].value,
+                name2: form['name2'].value,
+                name3: form['name3'].value,
+                grade: form['grade'].value,
+              }
+              
+              fetch(`student_edit/${user_id}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
+              }).then((response) => {
+                if (!response.ok) throw new Error(response.status)
+                window.location.replace('/page_student_anal.html')
+              }).catch((err) => {
+                this.removeAttribute('disabled')
+                this.removeAttribute('style')
+                error_message_edit_modal.innerHTML = err
+              })
+
+            ">
+          </div>
+          <div class="submit_btn">
+            Аналитика %ANAL%
+          </div>
+        </div>
+      </form>
+    </div>
+  
+    <!-- --------------------- -->
+
+    <div class="creation_modal_window" id="create_modal" hidden>
+      <form name="create_modal">
+        <div class="inputs_block">
+          <div class="main_inputs">
+            <div class="photo_block">
+              <img alt="Photo" src="Image/new/photo_icon.svg">
+            </div>
+            <div>
+              <input placeholder="Фамилия"  type="text" name="name1" value="">
+              <input placeholder="Имя"      type="text" name="name2" value="">
+              <input placeholder="Отчество" type="text" name="name3" value="">
+              <input placeholder="Класс"    type="text" name="grade" value="">
+            </div>
+          </div>
+   
+          <div id="error_message_creation_modal" style="color: red"></div>
+
+          <div class="submit_btn">
+            <input type="submit" value="Сохранить" class="analyst_btn_2" onclick="
+              event.preventDefault()
+              this.setAttribute('disabled', true)
+              this.setAttribute('style', 'background-color: gray; cursor: auto;')
+
+              const form = document.forms['create_modal']
+              const data = {
+                name1: form['name1'].value,
+                name2: form['name2'].value,
+                name3: form['name3'].value,
+                grade: form['grade'].value,
+              }
+
+              fetch('/student_create', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
+              }).then((response) => {
+                if (!response.ok) throw new Error(response.status)
+                location.reload()
+              }).catch((err) => {
+                this.removeAttribute('disabled')
+                this.removeAttribute('style')
+                error_message_edit_modal.innerHTML = err
+              })
+
+            ">
+          </div>
+          <!-- <div class="submit_btn">
+            %SAVED%
+          </div> -->
+        </div>
+      </form>
+    </div>
+
+
+    <!-- --------------------- -->
+  
+    <div class="content">
+      <nav>
+        <ul>
+          <li><a href="home" id='m1'>
+              <img alt="Home" src="Image/new/home_button.svg">
+          </a></li>
+          <li><a href="stats" id='m2'>
+            <img alt="Home" src="Image/new/stats_button.svg">
+          </a></li>
+          <li>
+            <!-- <a href="setup" id='m3'> -->
+              <img alt="Home" src="Image/new/settings_button_active.svg">
+            <!-- </a> -->
+          </li>
+          <li><a href="about" id='m0'>
+              <img alt="Home" src="Image/new/info_button.svg">
+          </a></li>
+          <li><a href="backup" id='m4'>
+            <img alt="backup" src="Image/new/backup_button.svg">
+        </a></li>
+        </ul>
+      </nav>
+  
+      <div class="body">
+        <div class="tab">
+          <div class="tab_header">
+            <img alt="header_about" src="Image/new/header_analyst_main.svg">
+            <div>
+              <button class="analyst_btn_2" id="creation_new_button_card">+ Создать новую карточку</button>
+            </div>
+          </div>
+          <div>
+  
+            <table class="styled_table" id="student_table">
+              <!-- %StudentTable% -->
+
+              <thead>
+                <tr>
+                    <th> * </th>
+                    <th> Фамилия </th>
+                    <th> Имя </th>
+                    <th> Отчество </th>
+                    <th> Класс </th>
+                    <th> Фото </th>
+                    <th> Ограничение аналитика </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-id="1">
+                    <th>  %%%%%  </th>
+                    <th> %NAME2% </th>
+                    <th> %NAME1% </th>
+                    <th> %NAME3% </th>
+                    <th> %GRADE% </th>
+                    <th> % param 1 % </th>
+                    <th> % param 2 % </th>
+                </tr>
+                <tr data-id="2">
+                    <th>  %%%%%  </th>
+                    <th> %NAME2% </th>
+                    <th> %NAME1% </th>
+                    <th> %NAME3% </th>
+                    <th> %GRADE% </th>
+                    <th> % param 1 % </th>
+                    <th> % param 2 % </th>
+                </tr>
+                <tr data-id="3">
+                    <th>  %%%%%  </th>
+                    <th> Петров </th>
+                    <th> Николай </th>
+                    <th> Анатольевич </th>
+                    <th> 4Г </th>
+                    <th> Фото есть </th>
+                    <th> 3 </th>
+                </tr>
+                <tr data-id="4">
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+        </div>
+  
+  
+      </div>
+  
+    </div>
+
+    <script>
+      $(document).ready(function() {
+
+        function fabrica(modalId) {
+          return function showModalWindow(e) {
+            const background = document.querySelector('.dark_background')
+            const modal_window = document.querySelector(`#${modalId}`)
+            modal_window.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX}px`)
+
+            let user_id = e.target.parentElement.dataset.id
+            localStorage.setItem('user_id', user_id)
+            error_message_edit_modal.innerHTML = ''
+            error_message_creation_modal.innerHTML = ''
+            
+            if (modalId === 'edit_modal') {
+              modal_window.getElementsByTagName('img')[0].setAttribute('src', `/photo_${user_id}.jpg`)
+              
+              const form = document.forms['edit_modal']
+
+              fetch(`/get_student?id=${user_id}`, {
+                method: 'GET'
+              }).then(response => {
+                return response.json()
+              }).then(data => {
+                form['name1'].value = data.name1
+                form['name2'].value = data.name2
+                form['name3'].value = data.name3
+                form['grade'].value = data.grade
+              })
+            }
+            
+            let count = 0
+            const windowShowing = e2 => {
+              if (count === 0) {
+                count++
+                return
+              }
+
+              if (!(
+                (e.clientX + 25 < e2.clientX && e2.clientX < e.clientX + 380) &&
+                (e.clientY < e2.clientY && e2.clientY < e.clientY + 300)
+              )) {
+                background.setAttribute('hidden', true)
+                modal_window.setAttribute('hidden', true)
+                document.body.removeEventListener('click', windowShowing)    
+                user_id = null
+              }
+            }
+
+            document.body.addEventListener('click', windowShowing)
+            
+            background.removeAttribute('hidden')
+            modal_window.removeAttribute('hidden')
+          }
+        }
+
+        student_table.onclick = function showModalWindow(e) {
+          if (e.target.parentElement.parentElement.nodeName === 'THEAD') return
+          fabrica('edit_modal')(e)
+        }
+
+        creation_new_button_card.onclick = function showCreationCard(e) {
+          fabrica('create_modal')(e)
+        }
+
+      })
+
+
+      console.log(document.forms)
+    </script>
+
+  </div>
+
+
+</body>
+

@@ -1,0 +1,491 @@
+%STEP%
+%MAX_STEP%
+%STEP_BACK%
+%STEP_NEXT%
+%STEP_LINE%
+%SAVED%
+%ANAL%
+
+вместо %TEMP_HEAD%, %TEMP_LIST%, %STUDENT_HEAD%, %STUDENT_LIST%
+%TempTable%, %StudentTable%
+
+
+page.replace(QByteArray("%STEP%"), QByteArray::number(step + 1));
+
+page.replace(QByteArray("%MAX_STEP%"), QByteArray::number(5));
+
+page.replace(QByteArray("%STEP_BACK%"), step > 0? "<input type='submit' name='step_back' value='Назад'>": "");
+
+page.replace(QByteArray("%STEP_NEXT%"), step + 1 < stepTotal
+               ? "<input type='submit' name='step_next' value='Далее'>"
+               : "<input type='submit' name='step_next' value='Завершить'>");
+
+QByteArray stepLine;
+  for (int i = 0; i < stepTotal; i++) {
+    if (i == step) {
+      stepLine.append(hasAnal? QByteArray("<img src='/Image/StepBlue.png'>"): QByteArray("<img src='/Image/StepRed.png'>"));
+    } else if (i < stepDone) {
+      stepLine.append(QByteArray("<img src='/Image/StepGreen.png'>"));
+    } else {
+      stepLine.append(QByteArray("<img src='/Image/StepGray.png'>"));
+    }
+  }
+page.replace(QByteArray("%STEP_LINE%"), stepLine);
+
+page.replace(QByteArray("%SAVED%"), stepFail
+               ? "<div class='resultFail' id='resultFail'><font color='red'>Необходимо вернуться на предыдущие шаги</font></div>\n"
+               : "");
+
+if (analUuidCount >= mPortal->getAnalUuidCount()) {
+    page.replace("%ANAL%", "<font color='green'>задана</font>");
+  } else if (analUuidCount > 0) {
+    page.replace("%ANAL%", QByteArray("<font color='red'>задано ")
+                 + QByteArray::number(analUuidCount) + " из " + QByteArray::number(mPortal->getAnalUuidCount()) + "</font>");
+  } else {
+    page.replace("%ANAL%", "<font color='red'>не задана</font>");
+  }
+
+
+
+
+_____________________________________________________________________________________________________________________________________________________________________________________________
+_____________________________________________________________________________________________________________________________________________________________________________________________
+_____________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+%TEMP_HEAD%, %TEMP_LIST%, %STUDENT_HEAD%, %STUDENT_LIST%
+больше нет
+теперь надо писать так:
+            <table>
+              %TempTable%
+            </table>
+
+          <table>
+            %StudentTable%
+          </table>
+
+
+_____________________________________________________________________________________________________________________________________________________________________________________________
+
+В %TempTable% лежит:
+
+QByteArray tableText;
+  tableText.append("<thead>\n<tr>");
+  const QStringList headerList = studentTempView.Headers();
+  for (const QString& header: headerList) {
+    tableText.append(QByteArray("<th>") + header.toUtf8() + "</th>");
+  }
+  tableText.append("</tr>\n</thead>");
+
+  tableText.append("<tbody>\n");
+  for (int i = 0; i < studentTempRowList.size(); i++) {
+    tableText.append("<tr>\n");
+    for (int j = 0; j < headerList.size(); j++) {
+      const QString& text = studentTempRow->Text(j);
+      tableText.append(QByteArray("<td>") + text.toUtf8() + QByteArray("</td>"));
+    }
+    tableText.append("</tr>\n");
+  }
+  tableText.append("</tbody>");
+
+  page.replace("%TempTable%", tableText);
+
+
+<thead>
+  <tr>
+    <th> 1 </th>
+    <th> 2 </th>
+    <th> 3 </th>
+    <th> 4 </th>
+    <th> 5 </th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td> a </td>
+    <td> b </td>
+    <td> c </td>
+    <td> d </td>
+    <td> e </td>
+  </tr>
+  <tr>
+    <td> a </td>
+    <td> b </td>
+    <td> c </td>
+    <td> d </td>
+    <td> e </td>
+  </tr>
+  <tr>
+    <td> a </td>
+    <td> b </td>
+    <td> c </td>
+    <td> d </td>
+    <td> e </td>
+  </tr>
+  <tr>
+    <td> a </td>
+    <td> b </td>
+    <td> c </td>
+    <td> d </td>
+    <td> e </td>
+  </tr>
+</tbody>
+
+_____________________________________________________________________________________________________________________________________________________________________________________________
+
+
+В %StudentTable% лежит:
+
+
+tableText.append("<thead>\n<tr><th>*</th>");
+  const QStringList headerList = studentTable.Headers();
+  for (const QString& header: headerList) {
+    tableText.append(QByteArray("<th>") + header.toUtf8() + "</th>");
+  }
+  tableText.append("</tr>\n</thead>");
+
+  tableText.append("<tbody>\n");
+  for (int i = 0; i < studentList.size(); i++) {
+    const StudentS& student = studentList.at(i);
+    tableText.append(QByteArray("
+        <tr>
+            <td>
+                <a href='student_edit_") + QByteArray::number(student->Id) + "'>
+                    <input type='image' src='/Image/MenuEdit.png'" " alt='Редактировать' width='32' height='32' name = 'student_edit'" " title='Редактировать'>
+                </a>
+            </td>
+    ");
+    for (int j = 0; j < headerList.size(); j++) {
+      const QString& text = student->Text(j);
+      tableText.append(QByteArray("
+        <td>
+    ") + text.toUtf8() + QByteArray("</td>"));
+    }
+    tableText.append("</tr>\n");
+  }
+  tableText.append("</tbody>");
+
+  page.replace("%StudentTable%", tableText);
+
+  <thead>
+    <tr>
+        <th> * </th>
+        <th> Фамилия </th>
+        <th> Имя </th>
+        <th> Отчество </th>
+        <th> Класс </th>
+        <th> Фото </th>
+        <th> ФотоОграничение аналитика </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <th>  %%%%%  </th>
+        <th> Петров </th>
+        <th> Николай </th>
+        <th> Анатольевич </th>
+        <th> 4Г </th>
+        <th> Фото есть </th>
+        <th> 3 </th>
+    </tr>
+  </tbody>
+
+
+
+PageStudentEdit.txt - файл удалён
+PageStudentCreate.txt - файл удалён
+
+
+_____________________________________________________________________________________________________________________________________________________________________________________________
+_____________________________________________________________________________________________________________________________________________________________________________________________
+_____________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+
+  <thead>
+              <tr>
+                  <th> * </th>
+                  <th> Фамилия </th>
+                  <th> Имя </th>
+                  <th> Отчество </th>
+                  <th> Класс </th>
+                  <th> Фото </th>
+                  <th> Ограничение аналитика </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-first-name="%NAME1%" data-second-name="%NAME2%" data-third-name="%NAME3%" data-grade="%GRADE%" data-id="%ID%">
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr data-first-name="%NAME1%" data-second-name="%NAME2%" data-third-name="%NAME3%" data-grade="%GRADE%" data-id="%ID%">
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+              <tr>
+                  <th>  %%%%%  </th>
+                  <th> Петров </th>
+                  <th> Николай </th>
+                  <th> Анатольевич </th>
+                  <th> 4Г </th>
+                  <th> Фото есть </th>
+                  <th> 3 </th>
+              </tr>
+            </tbody>
+
+
+
+
+Добавил кнопку резервного копирования, расположил кнопки меню плотнее друг к другу (добавлены две svg-картинки на новую кнопку, подправлен css)
+В модальном окне создания профиля по нажатии кнопки сохранить шлётся post-запрос с введёнными данными на /student_create. Если запрос завершается успешно, страница обновляется
+В модальном окне редактирования профиля при открытии теперь происходит подкачка данных с сервера (адрес /get_student. Это get-запрос). В запросе уходит id, взятое их data-атрибута строки
+В том же окне, по нажатии кнопки "перейти к аналитике" производится post-запрос на адрес /student_edit/:id с данными полей. Если это действие оказывается успешным, происходит открытие страницы аналитики
+Страница аналитики представляет собой файл page_student_anal.html, название которого не генерируется. id пользователя передаётся между страницами через localStorage
+При открытии страницы аналитики происходит запрос `/student_anaz?id=${user_id}&move=${move || null}`, возвращающий значение counter. параметр move задаётся нажатием кнопок "вперёд" и "назад" и позволяет на сервере менять counter
+Подкачка фотографий происходит через html, посредством сознания нового DOM-элемента, где указан соответствующий фотографии атрибут src

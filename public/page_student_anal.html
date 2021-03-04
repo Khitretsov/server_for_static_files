@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//RU">
+<html>
+<head>
+  <title>Портал NexTouch Санитайзер</title>
+  <link rel="icon" href="/Image/favicon.png" type="image/png">
+  <meta charset="utf-8">
+  <script src="Script/jquery.js"></script>
+  <script src="Script/jquery-ui.js"></script>
+  <script src="Script/jquery.timepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="Script/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="Script/jquery-ui.theme.css">
+  <link rel="stylesheet" type="text/css" href="Script/jquery.timepicker.css">
+  
+  <!-- !!!!!!!!!!!! убран defer !!!!!!!!!!!! -->
+  <script src="Script/common.js"></script>
+  <link href="Script/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <!-- %BODY% -->
+
+  <div class="content">
+    <nav>
+      <ul>
+        <li><a href="home" id='m1'>
+            <img alt="Home" src="Image/new/home_button.svg">
+        </a></li>
+        <li><a href="stats" id='m2'>
+          <img alt="Home" src="Image/new/stats_button.svg">
+        </a></li>
+        <li>
+          <!-- <a href="setup" id='m3'> -->
+            <img alt="Home" src="Image/new/settings_button_active.svg">
+          <!-- </a> -->
+        </li>
+        <li><a href="about" id='m0'>
+            <img alt="Home" src="Image/new/info_button.svg">
+        </a></li>
+        <li><a href="backup" id='m4'>
+            <img alt="backup" src="Image/new/backup_button.svg">
+        </a></li>
+      </ul>
+    </nav>
+
+    <div class="body">
+
+      <div class="tab">
+        <div class="tab_header">
+          <img alt="header_about" src="Image/new/header_analyst.svg">
+        </div>
+        <div class="analyst">
+          
+    
+          <div>
+
+            <div class="main-analyst-block">
+              <!-- <img src="/camera_%COUNTER%.jpg" alt="Ошибка" width="400" height="300" id="camera"> -->
+              <!-- <img src="Image/new/sanitayzer.png" alt="Ошибка" width="400" height="300" id="camera"> -->
+
+              <!-- <input type="hidden" id="step" name="step" value="%STEP%"> -->
+              <input type="hidden" id="step" name="step" value="1">
+              
+              <form action="/student_anaz_%ID%">
+                <div>
+                    <span class="analyst_btn" id="move_back">
+                        <!-- %STEP_BACK% -->
+                        Назад
+                    </span>
+                    <span class="analyst_btn" id="move_forward">
+                        <!-- %STEP_NEXT% -->
+                        Вперёд
+                    </span>
+                </div>
+
+                <div>
+                  <input type="submit" value="Обновить" class="analyst_btn">
+                  <span>
+                    <input type="checkbox" id="set_image" name="set_image" value="yes"%CHECKED%>
+                    <label for="set_image" class="checkbox">Установить как фото учащегося</label>
+                  </span>
+                </div>
+              </form>
+
+              <!-- <div>
+                %SAVED%
+              </div> -->
+            </div>
+      
+            <div>
+              <form action="/student_anaz_%ID%">
+                <input type="hidden" id="counter" name="counter" value="%COUNTER%">
+                
+              </form>
+            </div>
+            
+          </div>
+
+          <div class="info-space">
+            <div class="progress-bar"></div>
+            <div class="instruction-image"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+        user_id = localStorage.getItem('user_id')
+
+        function setCounter(move) {
+            return () => {
+                fetch(`/student_anaz?id=${user_id}&move=${move || null}`).then(response => response.json()).then(data => {
+                    
+                    counter = data.counter
+        
+                    const analystBlock = document.querySelector('.main-analyst-block')
+                    
+                    if (analystBlock.children[0].nodeName === 'IMG') {
+                        analystBlock.removeChild(analystBlock.children[0])
+                    }
+                    analystBlock.insertAdjacentHTML('afterbegin', `<img src="/camera_${counter}.jpg" alt="Ошибка" width="400" height="300" id="camera" >`)
+                    renderInfo(counter)
+                })
+            }
+        }
+
+        setCounter()()
+
+        move_back.onclick = setCounter('back')
+        move_forward.onclick = setCounter('next')
+
+        function renderInfo(count) {
+          const progressBar = document.querySelector('.progress-bar')
+          const instructionImages = document.querySelector('.instruction-image')
+
+          if (progressBar.children.length !== 0) {
+            progressBar.innerHTML = ''
+            instructionImages.innerHTML = ''
+          }
+
+          let stepId
+          
+          if (!count) {
+              document.querySelector('#step').value
+            } else {
+                stepId = count
+            }
+          
+          for (let i = 1; i < 6; i++) {
+            if (i <= stepId) {
+              progressBar.insertAdjacentHTML('beforeend', "<img src='Image/new/progress-bar-elem-green.svg'>")
+            } else {
+              progressBar.insertAdjacentHTML('beforeend', "<img src='Image/new/progress-bar-elem-grey.svg'>")
+            }
+          }
+          
+          stepId && instructionImages.insertAdjacentHTML('beforeend', `<img src='Image/new/instructions_${Number(stepId)}.svg'>`)
+        
+        }
+
+        renderInfo()
+
+        // setTimeout(() => {
+        //   const stepId = document.querySelector('#step')
+        //   console.log('___ step ___', stepId.value)
+        //   stepId.value = 4
+        //   renderInfo()
+
+        // }, 3000)
+
+      </script>
+
+    </div>
+
+  </div>
+
+</body>
+

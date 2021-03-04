@@ -1,0 +1,394 @@
+html {
+  height:100%;
+}
+
+/* Общие настройки */
+body {
+  /* background-color: antiquewhite; */
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: justify;
+  overflow: auto;
+  min-height:100%;
+  background-image: url("../Image/new/background.svg");
+  background-repeat: no-repeat;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content {
+  position: absolute;
+  top: 35%;
+  display: flex;
+  height: 600px;
+}
+
+/* Настройки к домашней странице */
+.sanitayzer {
+  width: 500px;
+  background-image: url("../Image/new/sanitayzer.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  top: -100px;
+}
+
+.sanitayzer .mark {
+  position: relative;
+  top: 50%;
+  color: darkorange;
+}
+
+.body {
+  display: flex;
+  padding-left: 100px;
+  min-height: 400px;
+}
+
+.form_wrapper {
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form {
+  min-width: 560px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form_button {
+  position: relative;
+  left: -4px;
+  background-color: rgb(160, 160, 160);
+  color: white;
+  border: none;
+  border-radius: 0px 5px 5px 0px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.form_input {
+  height: 25px;
+  box-sizing: border-box;
+  border-color: rgb(160, 160, 160);
+  color: orange;
+  font-weight: bold;
+  border-width: 1px;
+  text-align: center;
+  border-radius: 5px 0px 0px 5px;
+}
+
+/* Настройки к странице справки */
+.tab {
+  display: flex;
+  flex-direction: column;
+}
+
+.tab_header {
+  margin-bottom: 20px;
+}
+
+/* Настройки аналитики */
+
+.analyst {
+  display: flex;
+  
+}
+
+.analyst_btn {
+  background-color: rgb(160, 160, 160);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.analyst_btn_2 {
+  width: 230px;
+  background-color: #CA539A;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.checkbox {
+  position: relative;
+  left: -60px;
+}
+
+.stat_input {
+  border: none;
+  box-sizing: border-box;
+  color: white;
+  background-color:  rgb(160, 160, 160);
+  border-radius: 5px;
+  height: 25px;
+  text-align: center;
+}
+
+.creation_modal_window {
+  position:relative;
+  /* left: 1000px;
+  top: 500px; */
+
+  z-index: 10;
+  height: 500px;
+  background-image: url("../Image/new/modal_window.svg");
+  background-repeat: no-repeat;
+
+}
+
+.dark_background {
+  position: fixed;
+  z-index: 5;
+  background-color:  rgb(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+}
+
+.inputs_block {
+  position: relative;
+  left: 50px;
+  top: 20px;
+  width: 300px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main_inputs {
+  height: 150px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.main_inputs input {
+  box-sizing: border-box;
+  border: none;
+
+  border-bottom: 1px solid rgb(160, 160, 160);
+  text-align: center;
+  display: block;
+  margin-bottom: 8px;
+  height: 28px;
+}
+
+.photo_block {
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  width: 150px;
+}
+
+.photo_block img {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+}
+
+.submit_btn {
+  display: flex;
+  justify-content: center;
+}
+
+/* Настройки блока навигации */
+nav ul li {
+  margin-bottom: 20px;
+}
+
+nav ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+/* Таблица */
+
+.styled_table {
+  background-color: white;
+  /* box-shadow: 0px 0px 10px rgba(114, 114, 113, 0.3); */
+
+  font-style: normal;
+  border-collapse: collapse;
+
+  border-radius: 15px;
+  height: 200px;
+}
+
+
+tbody {
+  display:block;
+  overflow:auto;
+  height:400px;
+  width:100%;
+}
+
+thead {  
+  display:block;
+  background-color: #9C9FA0;
+  border-radius: 15px 15px 0px 0px;
+  color: white;
+}
+
+thead th {
+
+  font-weight: bold;
+}
+
+th {
+  font-weight: lighter;
+
+  font-size: 14px;
+  text-align: left;
+  padding: 10px 10px 10px 10px;
+}
+
+td {
+  padding: 8px 8px 8px 20px;
+}
+
+td, th {
+  width: 100px;
+}
+
+tr:nth-child(even) {
+  background-color: #eff2f5;
+}
+
+tbody tr:hover {
+  background-color: rgba(114, 114, 113, 0.2);
+  cursor: pointer;
+
+}
+
+/* Ввод даты */
+
+.data-inputs {
+  display: flex;
+  width: 380px;
+  justify-content: space-between;
+}
+
+#ui-datepicker-div tbody {
+  height: 150px
+}
+
+/* Шкала прохождения */
+
+.progress-bar {
+  /* transform: rotate(-90deg); */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 10px;
+  position: relative;
+  height: 260px;
+
+  margin-right: 30px;
+}
+
+.info-space {
+  display: flex;
+}
+
+.main-analyst-block div {
+  margin-bottom: 20px;
+}
+
+.main-analyst-block div span {
+  margin-right: 10px;
+}
+
+
+/* Прочее */
+
+input:not([type="image"]) {
+  width: 140px;
+}
+td.comp {
+  width: 218px;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-family: Century Schoolbook, "Times New Roman" , Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+  color: #28634A;
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.resultsOk {
+  background: #E8FFE8;
+  border: solid 1px #00FF77;
+  padding-left: 10px;
+  padding-right: 10px;
+  display:inline-block;
+}
+
+.resultsFail {
+  background: #FFE8E8;
+  border: solid 1px #FF0077;
+  padding-left: 10px;
+  padding-right: 10px;
+  display:inline-block;
+}
+
+.results table {
+  min-width: 100%;
+  min-height: 100%;
+}
+.results table tr th {
+  text-align: left;
+  background: #98CE9F;
+}
+.results table tr td {
+  text-align: left;
+}
+
+.opt_key {
+  text-align: right;
+  width: 120px;
+}
+.opt_value {
+  width: 600px;
+}
+.outCanvasWrapper{ 
+  width:800px; height:600px; 
+  border: solid 1px #00FF77;
+}
+.inCanvasWrapper{ 
+  width:100%; height:100%; 
+  position:relative;
+}
+.coveredImage{ 
+  width:100%; height:100%; 
+  position:absolute; top:0px; left:0px;
+  background-color: rgba(0,255,0,.1);
+}
+.coveringCanvas{ 
+  width:100%; height:100%; 
+  position:absolute; top:0px; left:0px;
+}
+section.footer span {
+  display: inline-block;
+  width: 33%;
+}
