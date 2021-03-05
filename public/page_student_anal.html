@@ -56,42 +56,41 @@
 
             <div class="main-analyst-block">
               <!-- <img src="/camera_%COUNTER%.jpg" alt="Ошибка" width="400" height="300" id="camera"> -->
-              <!-- <img src="Image/new/sanitayzer.png" alt="Ошибка" width="400" height="300" id="camera"> -->
 
-              <!-- <input type="hidden" id="step" name="step" value="%STEP%"> -->
               <input type="hidden" id="step" name="step" value="1">
               
-              <form action="/student_anaz_%ID%">
+              <!-- <form action="/student_anaz_%ID%"> -->
+              <div>
                 <div>
                     <span class="analyst_btn" id="move_back">
-                        <!-- %STEP_BACK% -->
                         Назад
                     </span>
                     <span class="analyst_btn" id="move_forward">
-                        <!-- %STEP_NEXT% -->
                         Вперёд
                     </span>
                 </div>
 
                 <div>
-                  <input type="submit" value="Обновить" class="analyst_btn">
+                  <input type="submit" value="Обновить" class="analyst_btn" id="refresh">
                   <span>
-                    <input type="checkbox" id="set_image" name="set_image" value="yes"%CHECKED%>
+                    <input type="checkbox" id="set_image" name="set_image" >
                     <label for="set_image" class="checkbox">Установить как фото учащегося</label>
                   </span>
                 </div>
-              </form>
+            </div>
+              <!-- </form> -->
 
               <!-- <div>
                 %SAVED%
               </div> -->
+              <span id="saved_status"></span>
             </div>
       
             <div>
-              <form action="/student_anaz_%ID%">
+              <!-- <form action="/student_anaz_%ID%">
                 <input type="hidden" id="counter" name="counter" value="%COUNTER%">
                 
-              </form>
+              </form> -->
             </div>
             
           </div>
@@ -107,10 +106,17 @@
       <script>
         user_id = localStorage.getItem('user_id')
 
-        function setCounter(move) {
+        function setCounter(action) {
             return () => {
-                fetch(`/student_anaz?id=${user_id}&move=${move || null}`).then(response => response.json()).then(data => {
+
+                fetch(`/student_anaz?id=${user_id}&action=${action || null}&set_image=${set_image.checked}`).then(response => response.json()).then(data => {
                     
+                    if (!data.saved) {
+                        saved_status.innerHTML = 'Ошибка. Не сохранено'
+                    } else {
+                        saved_status.innerHTML = ''
+                    }
+
                     counter = data.counter
         
                     const analystBlock = document.querySelector('.main-analyst-block')
@@ -128,6 +134,7 @@
 
         move_back.onclick = setCounter('back')
         move_forward.onclick = setCounter('next')
+        refresh.onclick = setCounter('refresh')
 
         function renderInfo(count) {
           const progressBar = document.querySelector('.progress-bar')
@@ -159,14 +166,6 @@
         }
 
         renderInfo()
-
-        // setTimeout(() => {
-        //   const stepId = document.querySelector('#step')
-        //   console.log('___ step ___', stepId.value)
-        //   stepId.value = 4
-        //   renderInfo()
-
-        // }, 3000)
 
       </script>
 

@@ -244,7 +244,7 @@
             const modal_window = document.querySelector(`#${modalId}`)
             modal_window.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX}px`)
 
-            let user_id = e.target.parentElement.dataset.id
+            user_id = e.target.parentElement.dataset.id
             localStorage.setItem('user_id', user_id)
             error_message_edit_modal.innerHTML = ''
             error_message_creation_modal.innerHTML = ''

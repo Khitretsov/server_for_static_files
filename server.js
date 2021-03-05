@@ -12,7 +12,6 @@ app.get('/', (req, res) => {
 
 app.post('/student_edit/:id', (req, res) => {
     const id = req.params.id
-    console.log('ko-ko-ko', res)
     res.status(200)
     res.json('Данные пользоватлея отредактированны')
 })
@@ -36,18 +35,19 @@ app.get('/get_student', (req, res) => {
 let count = 1
 app.get('/student_anaz', (req, res) => {
     const id = req.query.id
-    const move = req.query.move
-    if (move === 'back' && count > 1) {
+    const action = req.query.action
+    if (action === 'back' && count > 1) {
         count = count - 1
     }
 
-    if (move === 'next' && count < 5) {
+    if (action === 'next' && count < 5) {
         count = count + 1
     }
 
     res.status(200)
     res.json({
-        counter: count
+        counter: count,
+        saved: true
     })
 })
 
